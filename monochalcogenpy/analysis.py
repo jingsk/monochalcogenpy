@@ -6,8 +6,7 @@ import sys
 from monochalcogenpy.plotter import plot_EV, plot_theta
 from monochalcogenpy.tilt_angle import tilt_angle
 
-def dashboard(traj_name, time_step, image_name = './dashboard.png'):
-    traj = read(traj_name, ':')
+def dashboard(traj, time_step, image_name = './dashboard.png'):
     time = time_step * np.arange(len(traj)) #ps
     fig, axs = plt.subplots(
         2,1,
@@ -35,5 +34,6 @@ def dashboard(traj_name, time_step, image_name = './dashboard.png'):
     fig.savefig(image_name, dpi=300)
 
 if __name__=='__main__':
+    traj = read(sys.argv[1], ':')
     time_step = float(sys.argv[2])
-    dashboard(sys.argv[1], time_step, image_name = './dashboard.png')
+    dashboard(traj, time_step, image_name = './dashboard.png')
