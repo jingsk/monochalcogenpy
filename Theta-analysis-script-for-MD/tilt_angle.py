@@ -18,7 +18,7 @@ def vec_dir_check(v, dir ='c', thres = 0.8):
     dir_idx = 'abc'.find(dir)
     ref_vec = [0,0,0]
     ref_vec[dir_idx] = 1
-    return v@ref_vec > thres
+    return v@ref_vec/np.linalg.norm(v) > thres
 
 def tilt_angle(atoms, proj):
     '''
@@ -36,10 +36,11 @@ def tilt_angle(atoms, proj):
     tilt_angle = {}
     for idx in Ge_idx:
         for D in dis_vec[src==idx]:
-            if vec_dir_check(D, dir =proj[1], thres = 0.8):
+            if vec_dir_check(D, dir =proj[1], thres = 0.9):
                 try: 
                     tilt_angle[idx]
-                    print('Duplicate found at idx = {idx}.')
+                    print(f'Duplicate found at idx = {idx}.')
+                    print(f'dis_vec = {dis_vec[src == idx]}.')
                     tilt_angle[idx] = tilt_angle[idx]+[_projected_vector_angle(D, proj)]
                 except KeyError:
                     tilt_angle[idx] = [_projected_vector_angle(D, proj)]

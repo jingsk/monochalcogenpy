@@ -27,12 +27,14 @@ def plot_EV(time:NDArray, E_atom:NDArray, V:NDArray, ax1):
     ax2.yaxis.set_major_locator(ticker.MultipleLocator(0.1))
     ax2.yaxis.set_minor_locator(ticker.MultipleLocator(0.025))
 
-# def plot_theta(time:NDArray, theta:NDArray, ax):
-#     '''
-#     theta is a list of tilt angle present in each timestep
-#     '''
-#     ax.plot(r_grid, gr)
-#     ax.legend(leg, fontsize=5)
-#     ax.set_ylabel(r'g(r) norm.')
-#     ax.set_xlabel(r'r ($\AA{}$)')
-#     ax.set_xlim([0,r_grid[-1] - 0.5])
+def plot_theta(time:NDArray, theta:NDArray, color: str, ax, num_to_plot = 10):
+    '''
+    theta is a list of tilt angle present in each timestep
+    '''
+    interval = int(len(time)/num_to_plot)
+    parts = ax.violinplot(theta[::interval], positions=time[::interval])
+    for pc in parts['bodies']:
+        pc.set_facecolor(color)
+    # ax.set_ylabel(r'g(r) norm.')
+    # ax.set_xlabel(r'r ($\AA{}$)')
+    # ax.set_xlim([0,r_grid[-1] - 0.5])
