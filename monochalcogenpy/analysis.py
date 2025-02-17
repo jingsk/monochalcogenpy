@@ -1,14 +1,10 @@
-#Name: Tina Mihm
-#Date: 12/10/2024
-#Description: Pulls the volume, temperature, timesteps, theta and structures and graphs volume vs the time
-
 import numpy as np
 import math as math
 import matplotlib.pyplot as plt
 from ase.io import read
 import sys
-from plotter import plot_EV, plot_theta
-from tilt_angle import tilt_angle
+from monochalcogenpy.plotter import plot_EV, plot_theta
+from monochalcogenpy.tilt_angle import tilt_angle
 
 def dashboard(traj_name, time_step, image_name = './dashboard.png'):
     traj = read(traj_name, ':')
