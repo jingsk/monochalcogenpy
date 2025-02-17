@@ -20,7 +20,7 @@ def plot_EV(time:NDArray, E_atom:NDArray, V:NDArray, ax1):
     ax2.tick_params(axis='y', labelcolor=color)
 
     ax1.xaxis.set_major_locator(ticker.MultipleLocator(100))
-    ax1.xaxis.set_minor_locator(ticker.MultipleLocator(25))
+    ax1.xaxis.set_minor_locator(ticker.MultipleLocator(10))
 
     ax1.yaxis.set_major_locator(ticker.MultipleLocator(0.01))
     ax1.yaxis.set_minor_locator(ticker.MultipleLocator(0.0025))
