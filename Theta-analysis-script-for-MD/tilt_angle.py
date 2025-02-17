@@ -10,7 +10,7 @@ def _projected_vector_angle(v, proj ='ab'):
     opp_idx, adj_idx, flatted_idx = ['abc'.find(i) for i in ordered_idx]
     v[flatted_idx] = 0
     #cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
-    angle = np.arctan(v[opp_idx]/v[adj_idx])
+    angle = np.abs(np.arctan(v[opp_idx]/v[adj_idx]))
     return np.degrees(angle)
 
 def vec_dir_check(v, dir ='c', thres = 0.8):
