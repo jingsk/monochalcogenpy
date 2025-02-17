@@ -22,9 +22,11 @@ def dashboard(traj_name, time_step, image_name = './dashboard.png'):
     E_atom = np.array([atoms.get_total_energy() for atoms in traj])/len(traj[0])
     V = np.array([atoms.get_volume() for atoms in traj])
     plot_EV(time, E_atom, V, axs[0])
-    for p,c in zip(['bc', 'ac'], ['tab:blue','tab:orange']):
+    projections = ['bc', 'ac']
+    for p,c in zip(projections, ['tab:blue','tab:orange']):
         theta = [np.concatenate(list(tilt_angle(atoms, p).values())) for atoms in traj]
-        plot_theta(time,theta,c,axs[1])
+        plot_theta(time,theta,c,p[0],axs[1])
+    axs[1].legend(loc='upper right', fontsize=8)
     #fig.tight_layout()
     #plt.subplots_adjust(left=0.25, bottom=0.2, right=0.8, top=0.8, wspace=None, hspace=None)
     fig.savefig(image_name, dpi=300)
