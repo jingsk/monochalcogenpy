@@ -32,7 +32,7 @@ def plot_theta(time:NDArray, theta:NDArray, color: str, ax, num_to_plot = 10):
     theta is a list of tilt angle present in each timestep
     '''
     interval = int(len(time)/num_to_plot)
-    parts = ax.violinplot(theta[::interval], positions=time[::interval])
+    parts = ax.violinplot(theta[::interval], positions=time[::interval], widths=(time[interval]- time[0]))
     for pc in parts['bodies']:
         pc.set_facecolor(color)
     # ax.set_ylabel(r'g(r) norm.')
