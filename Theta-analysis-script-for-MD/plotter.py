@@ -8,8 +8,7 @@ def plot_EV(time:NDArray, E_atom:NDArray, V:NDArray, ax1):
     #ax1.set_aspect(1)
 
     color = 'tab:red'
-    ax1.set_xlabel('time (ps)')
-    ax1.set_ylabel('total energy (eV/atom)', color=color)
+    ax1.set_ylabel('total energy \n(eV/atom)', color=color)
     ax1.plot(time, E_atom, color=color)
     ax1.tick_params(axis='y', labelcolor=color)
     ax2 = ax1.twinx()  # instantiate a second Axes that shares the same x-axis
@@ -44,7 +43,7 @@ def plot_theta(time:NDArray, theta:NDArray, color: str, label,  ax, num_to_plot 
     ax.xaxis.set_minor_locator(ticker.MultipleLocator(10))
     ax.yaxis.set_major_locator(ticker.MultipleLocator(10))
     ax.yaxis.set_minor_locator(ticker.MultipleLocator(2))
-    ax.set_xlabel('time (ps)')
+    #ax.set_xlabel('time (ps)')
     ax.set_ylabel(r'tilt angle ($^{\circ}$)')
     # ax.set_ylabel(r'g(r) norm.')
     # ax.set_xlabel(r'r ($\AA{}$)')

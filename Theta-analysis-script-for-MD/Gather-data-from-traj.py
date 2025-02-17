@@ -14,11 +14,14 @@ def dashboard(traj_name, time_step, image_name = './dashboard.png'):
     traj = read(traj_name, ':')
     time = time_step * np.arange(len(traj)) #ps
     fig, axs = plt.subplots(
-        1,2,
-        figsize=[6,2.5], 
-        width_ratios = [1,1],
-        layout="constrained")
+        2,1,
+        figsize=[4,3], 
+        height_ratios= [1,1],
+        sharex=True,
+        #layout="constrained",
+        gridspec_kw={'hspace': 0})
 
+    
     E_atom = np.array([atoms.get_total_energy() for atoms in traj])/len(traj[0])
     V = np.array([atoms.get_volume() for atoms in traj])
     plot_EV(time, E_atom, V, axs[0])
@@ -27,6 +30,10 @@ def dashboard(traj_name, time_step, image_name = './dashboard.png'):
         theta = [np.concatenate(list(tilt_angle(atoms, p).values())) for atoms in traj]
         plot_theta(time,theta,c,p[0],axs[1])
     axs[1].legend(loc='upper right', fontsize=8)
+    fig.supxlabel('time (ps)', y=0.025, fontsize=10)
+    axs[0].tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
+    axs[0].set_box_aspect(0.6)
+    axs[1].set_box_aspect(0.6)
     #fig.tight_layout()
     #plt.subplots_adjust(left=0.25, bottom=0.2, right=0.8, top=0.8, wspace=None, hspace=None)
     fig.savefig(image_name, dpi=300)
