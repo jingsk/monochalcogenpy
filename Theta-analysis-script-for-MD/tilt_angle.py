@@ -1,5 +1,6 @@
 import numpy as np
 from itertools import permutations
+from matscipy.neighbours import neighbour_list
 
 supported_projection = [v+w for v,w in permutations('abc', 2)]
 
@@ -12,6 +13,13 @@ def _projected_vector_angle(v, proj ='ab'):
     angle = np.arctan(v[opp_idx]/v[adj_idx])
     return np.degrees(angle)
 
+def vec_dir_check(v, dir ='c', thres = 0.8):
+    dir = dir.lower()
+    dir_idx = 'abc'.find(dir)
+    ref_vec = [0,0,0]
+    ref_vec[dir_idx] = 1
+    return v@ref_vec > thres
+
 def tilt_angle(atoms, proj):
     '''
     proj is the plane to project v,w and the string 
@@ -19,4 +27,21 @@ def tilt_angle(atoms, proj):
     '''
     if proj not in supported_projection:
         raise ValueError(f"Projection {proj} not supported.")
-    #return projected_vector_angle(*[atoms.get_positions()[i] for i in [2,5]])
+    src, dst, dis_vec = neighbour_list(
+        'ijD',
+        atoms=atoms,
+        cutoff={('Ge', 'Se'): 3}
+    )
+    Ge_idx = [atom.index for atom in atoms if atom.symbol=='Ge']
+    tilt_angle = {}
+    for idx in Ge_idx:
+        for D in dis_vec[src==idx]:
+            if vec_dir_check(D, dir =proj[1], thres = 0.8):
+                try: 
+                    tilt_angle[idx]
+                    print('Duplicate found at idx = {idx}.')
+                    tilt_angle[idx] = tilt_angle[idx]+[_projected_vector_angle(D, proj)]
+                except KeyError:
+                    tilt_angle[idx] = [_projected_vector_angle(D, proj)]
+    return tilt_angle
+                
