@@ -6,5 +6,6 @@ setup(name='monochalcogen_analysis',
       install_requires = [
         'ase>=3.23',
         'matscipy>=1.1.0',
+        'matplotlib>=3.9.0'
     ]
       )
