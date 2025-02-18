@@ -31,9 +31,12 @@ def plot_theta(time:NDArray, theta:NDArray, color: str, label,  ax, num_to_plot 
     #time = np.array(time)
     #theta = np.array(theta)
     interval = int(len(time)/num_to_plot)
-    parts = ax.violinplot(theta[::interval], positions=time[::interval], widths=(time[interval]- time[0]),side='low')
+    parts = ax.violinplot(theta[::interval], positions=time[::interval], widths=(time[interval]- time[0]),side='low',showmeans=True)
     for pc in parts['bodies']:
         pc.set_facecolor(color)
+    for lc in [parts['cbars'],parts['cmeans'], parts['cmins'], parts['cmaxes']]:
+        lc.set_linewidth(0.5)
+        lc.set_color(color)
     #X, Y = np.repeat(time, theta.shape[1]), theta.ravel()
     result = np.array([[time[::interval][i], x] for i in range(len(time[::interval])) for x in theta[::interval][i]])
     ax.plot(result[:,0],result[:,1], 'x', color=color, label=label, markersize=2, alpha=0.5)

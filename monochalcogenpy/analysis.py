@@ -21,7 +21,7 @@ def dashboard(traj, time_step, image_name = './dashboard.png'):
     V = np.array([atoms.get_volume() for atoms in traj])
     plot_EV(time, E_atom, V, axs[0])
     projections = ['bc', 'ac']
-    for p,c in zip(projections, ['tab:blue','tab:orange']):
+    for p,c in zip(projections, ['tab:orange','tab:green']):
         theta = [np.concatenate(list(tilt_angle(atoms, p).values())) for atoms in traj]
         plot_theta(time,theta,c,p[0],axs[1])
     axs[1].legend(loc='upper right', fontsize=8)
