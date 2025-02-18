@@ -31,9 +31,11 @@ def dashboard(traj, time_step, image_name = './dashboard.png'):
     axs[1].set_box_aspect(0.6)
     #fig.tight_layout()
     #plt.subplots_adjust(left=0.25, bottom=0.2, right=0.8, top=0.8, wspace=None, hspace=None)
+    #fig.title(image_name[7:-3])
     fig.savefig(image_name, dpi=300)
+    return fig, axs
 
 if __name__=='__main__':
     traj = read(sys.argv[1], ':')
     time_step = float(sys.argv[2])
-    dashboard(traj, time_step, image_name = './dashboard.png')
+    fig, axs = dashboard(traj, time_step, image_name = './dashboard.png')
