@@ -213,7 +213,7 @@ def parse_symbols(symbols):
         symbols = string2symbols(symbols)
     return symbols
 
-def equivalent_sites(basis, spg_dataset,symprec = 1e-4):
+def equivalent_sites(basis, spg_dataset, onduplicates ='keep',symprec = 1e-3):
     """Create an Atoms instance for a conventional unit cell of a
     space group. Originally from ase modified by Jing T.
 
@@ -230,6 +230,16 @@ def equivalent_sites(basis, spg_dataset,symprec = 1e-4):
         and 'NaCl' are equivalent.  Can also be given as a sequence of
         Atom objects or an Atoms object.
     spg_dataset : spglib dataset obtained from ase.spacegroup.symmetrize.check_symmetry
+    onduplicates : 'keep' | 'replace' | 'warn' | 'error'
+        Action if `basis` contain symmetry-equivalent positions:
+            'keep'    - ignore additional symmetry-equivalent positions
+            'replace' - replace
+            'warn'    - like 'keep', but issue an UserWarning
+            'error'   - raises a SpacegroupValueError
+    symprec : float
+        Minimum "distance" betweed two sites in scaled coordinates
+        before they are counted as the same site.
+
     """
     #from ase.spacegroup.symmetrize import check_symmetry
     #s_ds = check_symmetry(atoms)
