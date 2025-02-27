@@ -19,7 +19,6 @@ import ase
 from ase.geometry import cellpar_to_cell
 from ase.symbols import string2symbols
 import warnings
-from crystal import crystal
 
 class SpacegroupError(Exception):
     """Base exception for the spacegroup module."""
