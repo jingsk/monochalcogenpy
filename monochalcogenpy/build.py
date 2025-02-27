@@ -2,6 +2,7 @@
 from ase import Atoms
 import numpy as np
 from monochalcogenpy.crystal import crystal
+from monochalcogenpy.spacegroup import Spacegroup_MX
 
 def unit_cell(a, b, c, orientation ='ac', use_symm=False):
     #currently only ac orientation is supported
@@ -31,9 +32,10 @@ def unit_cell(a, b, c, orientation ='ac', use_symm=False):
             [0 + x_Ge, 0, 0.5 - h / 2+z_Ge], #Ge
             [0,        0, 0.5 - h / 2]              #Se
         ]) 
+        sg = Spacegroup_MX(sg_no=31, orientation='ac')
         atoms = crystal(
         ('Ge', 'Se'), 
         basis=basis, 
-        spacegroup = 31, 
+        spacegroup = sg, 
         cell=cell)
     return atoms
