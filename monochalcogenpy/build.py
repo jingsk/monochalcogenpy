@@ -12,8 +12,8 @@ def unit_cell(a, b, c, orientation ='ac', use_symm=False):
     #angle relative of Se-Ge vector to vdw direction along the ac plane
     theta = np.arctan(np.sqrt(2)) - np.arctan(2*h*c/a)
     #displacement 
-    z_Ge = 1/np.sqrt(2) * b * np.cos(theta) / c
-    x_Ge = 1/np.sqrt(2) * b * np.sin(theta) / a
+    z_Ge = 2.56 * np.cos(theta) / c
+    x_Ge = 2.56 * np.sin(theta) / a
     if not use_symm:
         pos = np.array([
             [0   + x_Ge, 0,   0.5 - h / 2+z_Ge, ], #Ge1
