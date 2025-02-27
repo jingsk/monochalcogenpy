@@ -2,6 +2,7 @@
 from ase import Atoms
 import numpy as np
 import warnings
+from crystal import crystal
 
 class SpacegroupError(Exception):
     """Base exception for the spacegroup module."""
@@ -103,7 +104,6 @@ def unit_cell(a, b, c, use_symm=False):
             pbc=[True,True,True]
             )
     else:
-        from ase.spacegroup import crystal
         basis = np.array([
             [0 + x_Ge, 0, 0.5 - h / 2+z_Ge], #Ge
             [0,        0, 0.5 - h / 2]              #Se

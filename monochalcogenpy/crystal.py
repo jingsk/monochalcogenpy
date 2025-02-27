@@ -15,25 +15,25 @@ from typing import Any, Dict
 
 import numpy as np
 from scipy import spatial
-
+from struct import equivalent_sites
 import ase
 from ase.geometry import cellpar_to_cell
-from ase.spacegroup import Spacegroup
 from ase.symbols import string2symbols
 
 __all__ = ['crystal']
 
 
-def crystal(symbols=None, basis=None, occupancies=None, spacegroup=1, setting=1,
+def crystal(spg_dataset, symbols=None, basis=None, occupancies=None,
             cell=None, cellpar=None,
             ab_normal=(0, 0, 1), a_direction=None, size=(1, 1, 1),
             onduplicates='warn', symprec=0.001,
-            pbc=True, primitive_cell=False, **kwargs) -> ase.Atoms:
+            pbc=True, **kwargs) -> ase.Atoms:
     """Create an Atoms instance for a conventional unit cell of a
     space group.
 
     Parameters:
 
+    spg_dataset : spglib dataset obtained from ase.spacegroup.symmetrize.check_symmetry
     symbols : str | sequence of str | sequence of Atom | Atoms
         Element symbols of the unique sites.  Can either be a string
         formula or a sequence of element symbols. E.g. ('Na', 'Cl')
@@ -84,9 +84,6 @@ def crystal(symbols=None, basis=None, occupancies=None, spacegroup=1, setting=1,
         Periodic boundary conditions flags.  Examples: True,
         False, 0, 1, (1, 1, 0), (True, False, False).  Default
         is True.
-    primitive_cell : bool
-        Whether to return the primitive instead of the conventional
-        unit cell.
 
     Keyword arguments:
 
@@ -110,7 +107,7 @@ def crystal(symbols=None, basis=None, occupancies=None, spacegroup=1, setting=1,
     >>> len(skutterudite)
     32
     """
-    sg = Spacegroup(spacegroup, setting)
+    
     if (
             not isinstance(symbols, str) and
             hasattr(symbols, '__getitem__') and
@@ -148,7 +145,8 @@ def crystal(symbols=None, basis=None, occupancies=None, spacegroup=1, setting=1,
 
             occupancies_dict[str(index)] = occ.copy()
 
-    sites, kinds = sg.equivalent_sites(basis_coords,
+    sites, kinds = equivalent_sites(basis_coords,
+                                       spg_dataset=spg_dataset,
                                        onduplicates=onduplicates,
                                        symprec=symprec)
 
@@ -171,11 +169,6 @@ def crystal(symbols=None, basis=None, occupancies=None, spacegroup=1, setting=1,
         cell = cellpar_to_cell(cellpar, ab_normal, a_direction)
 
     info: Dict[str, Any] = {}
-    info['spacegroup'] = sg
-    if primitive_cell:
-        info['unit_cell'] = 'primitive'
-    else:
-        info['unit_cell'] = 'conventional'
 
     if 'info' in kwargs:
         info.update(kwargs['info'])
@@ -201,15 +194,6 @@ def crystal(symbols=None, basis=None, occupancies=None, spacegroup=1, setting=1,
 
     if kinds:
         atoms.new_array('spacegroup_kinds', np.asarray(kinds, dtype=int))
-
-    if primitive_cell:
-        from ase.build import cut
-        prim_cell = sg.scaled_primitive_cell
-
-        # Preserve calculator if present:
-        calc = atoms.calc
-        atoms = cut(atoms, a=prim_cell[0], b=prim_cell[1], c=prim_cell[2])
-        atoms.calc = calc
 
     if size != (1, 1, 1):
         atoms = atoms.repeat(size)
