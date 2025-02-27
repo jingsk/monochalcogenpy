@@ -3,10 +3,8 @@ from ase import Atoms
 import numpy as np
 from monochalcogenpy.crystal import crystal
 
-def unit_cell(a, b, c, use_symm=False):
-    #replacing #b with c
-    #replacing #c with a
-    #replacing #a with b
+def unit_cell(a, b, c, orientation ='ac', use_symm=False):
+    #currently only ac orientation is supported
     cell = np.diag([a,b,c])
     #define Se-Se height 
     h = np.sqrt(3 - (a/b)**2)/2 * b /c
