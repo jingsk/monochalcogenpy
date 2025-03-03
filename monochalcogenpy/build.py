@@ -8,7 +8,7 @@ def unit_cell(a, b, c, orientation ='ac', use_symm=False):
     #currently only ac orientation is supported
     cell = np.diag([a,b,c])
     #define a1 > a2
-    [a1, a2] = np.sort([a,b])
+    [a2, a1] = np.sort([a,b])
     #define Se-Se height 
     h = np.sqrt(3 - (a1/a2)**2)/2 * a2 /c
     #angle relative of Se-Ge vector to vdw direction along the ac plane
