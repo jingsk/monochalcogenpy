@@ -7,13 +7,15 @@ from monochalcogenpy.spacegroup import Spacegroup_MX
 def unit_cell(a, b, c, orientation ='ac', use_symm=False):
     #currently only ac orientation is supported
     cell = np.diag([a,b,c])
+    #define a1 > a2
+    [a1, a2] = np.sort([a,b])
     #define Se-Se height 
-    h = np.sqrt(3 - (a/b)**2)/2 * b /c
+    h = np.sqrt(3 - (a1/a2)**2)/2 * a2 /c
     #angle relative of Se-Ge vector to vdw direction along the ac plane
-    theta = np.arctan(np.sqrt(2)) - np.arctan(2*h*c/a)
+    theta = np.arctan(np.sqrt(2)) - np.arctan(2*h*c/a1)
     #displacement 
     z_Ge = 2.56 * np.cos(theta) / c
-    x_Ge = 2.56 * np.sin(theta) / a
+    x_Ge = 2.56 * np.sin(theta) / a1
     if not use_symm:
         if orientation == 'ac':
             pos = np.array([
