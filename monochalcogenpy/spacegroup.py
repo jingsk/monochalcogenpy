@@ -38,7 +38,10 @@ def fill_abc(string):
 
 def sort_axis_indices(orientation, ref_orientation):
     #goal - turn indices currently along abc into current orientation
-    return sort_string_indices(ref_orientation, 'abc')[sort_string_indices('abc', orientation)]
+    #understand this as (the first part gives mapping from 'abc' to ref_orientation.)
+    #then the second maps orientation to bc 
+    #so in effect we are mapping from orientation to abc obeying order from ref_orientation
+    return sort_string_indices('abc',ref_orientation)[sort_string_indices(orientation, 'abc')]
 
 def sort_string_indices(string, ref_string):
     """
