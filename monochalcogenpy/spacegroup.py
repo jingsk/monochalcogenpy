@@ -51,6 +51,6 @@ def sort_string_indices(string, ref_string):
     Returns:
     A list of integers representing the sorted indices of string.
     """
-    indices = {c: i for i, c in enumerate(list(ref_string))}
-    sort_index = np.array([indices[char] for char in list(string)])
+    indices = {c: i for i, c in enumerate(list(string))}
+    sort_index = np.array([indices[char] for char in list(ref_string)])
     return sort_index
