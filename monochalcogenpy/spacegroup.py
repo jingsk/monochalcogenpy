@@ -8,7 +8,7 @@ class Spacegroup_MX(Spacegroup):
         if self.sg_no == 31:
             self.ref_orientation = 'cb'
         self.orientation = orientation
-        self.sort_index = sort_string_indices(
+        self.sort_index = sort_axis_indices(
             fill_abc(self.orientation),
             fill_abc(self.ref_orientation)
         )
@@ -30,13 +30,15 @@ class Spacegroup_MX(Spacegroup):
             rots[i] = np.diag(diag_elements[self.sort_index])
         return tuple(rots)
         
-    
-
         
 def fill_abc(string):
     assert len(string) ==2
     missing_char = [char for char in 'abc' if char not in string][0]
     return string + missing_char
+
+def sort_axis_indices(orientation, ref_orientation):
+    #goal - turn indices currently along abc into current orientation
+    return sort_string_indices(ref_orientation, 'abc')[sort_string_indices('abc', orientation)]
 
 def sort_string_indices(string, ref_string):
     """
