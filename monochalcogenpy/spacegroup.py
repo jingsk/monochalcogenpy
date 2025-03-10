@@ -8,6 +8,8 @@ class Spacegroup_MX(Spacegroup):
         self.sg_no = sg_no
         if self.sg_no == 31:
             self.ref_orientation = 'cb'
+        if self.sg_no == 62:
+            self.ref_orientation = 'ca'
         self.orientation = orientation
         self.sort_index = sort_axis_indices(
             fill_abc(self.orientation),
