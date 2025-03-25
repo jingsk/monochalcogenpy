@@ -62,21 +62,23 @@ def unit_cell_bulk(a, b, c, registry=[0., 0.], orientation ='ac', use_symm=True)
     x_Ge = 2.56 * np.sin(theta) / a1
 
     if not use_symm:
-        #not yet supported
-        pass
-        # pos = np.array([
-        #     [0   + x_Ge, 0,   0.5 - h / 2+z_Ge, ], #Ge1
-        #     [0.5 + x_Ge, 0.5, 0.5 + h / 2-z_Ge], #Ge2
-        #     [0,          0,   0.5 - h / 2],  #Se1
-        #     [0.5,        0.5, 0.5 + h / 2],  #Se2
-        #     ])
-        # pos = pos_by_orientation(pos, orientation)
-        # atoms = Atoms(
-        #     'Ge2Se2',
-        #     scaled_positions=pos,
-        #     cell = cell,
-        #     pbc=[True,True,True]
-        #     )
+        pos = np.array([
+            [0.0 + x_Ge, 0.25, 0.25 - h / 2+z_Ge], #Ge1
+            [0.5 + x_Ge, 0.75, 0.25 + h / 2-z_Ge], #Ge2
+            [0.0 - x_Ge, 0.75, 0.75 - h / 2+z_Ge], #Ge3
+            [0.5 - x_Ge, 0.25, 0.75 + h / 2-z_Ge], #Ge4
+            [0.5,        0.75, 0.25 - h / 2],      #Se1
+            [0.0,        0.25, 0.25 + h / 2],      #Se2
+            [0.5,        0.25, 0.75 + h / 2],      #Se3
+            [0.0,        0.75, 0.75 - h / 2],      #Se4            
+            ])
+        pos = pos_by_orientation(pos, orientation, ref_orientation)
+        atoms = Atoms(
+            'Ge4Se4',
+            scaled_positions=pos,
+            cell = cell,
+            pbc=[True,True,True]
+            )
     else:
         basis = np.array([
             [0 + x_Ge, 0.25, 0.25 + h / 2-z_Ge], #Ge
