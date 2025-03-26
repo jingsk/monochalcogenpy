@@ -5,6 +5,16 @@ from matscipy.neighbours import neighbour_list
 supported_projection = [v+w for v,w in permutations('abc', 2)]
 
 def _projected_vector_angle(v, proj ='ab'):
+    """
+    Parameters
+    ----------
+    v: Numpy Array 
+        cartesian vector
+    proj: String
+    Projection onto which v is projected, Must be a 2-product of 'a', 'b', or 'c'.
+
+    Given cartesian vector v and projection, evaluate the angle made by opp and adj.
+    """
     proj = proj.lower()
     ordered_idx = list(proj) +[axis for axis in 'abc' if axis not in proj]
     opp_idx, adj_idx, flatted_idx = ['abc'.find(i) for i in ordered_idx]
@@ -13,15 +23,41 @@ def _projected_vector_angle(v, proj ='ab'):
     angle = np.abs(np.arctan(v[opp_idx]/v[adj_idx]))
     return np.degrees(angle)
 
-def vec_dir_check(v, dir ='c', thres = 0.8):
+def vec_dir_check(v, dir ='c', thres = 0.9):
+    """
+    Parameters
+    ----------
+    v: Numpy Array 
+        Cartesian vector
+    dir: String 
+        Direction to check if v is on, either 'a', 'b', or 'c'
+    thres: float (optional)
+        Threshold for vector alignment along direction specified. 
+        This is implemented as the dot product of v and unit vector 
+        corresponding to dir.
+
+    Given cartesian vector v and direction either a, b, or c, dir, check if 
+    v is aligned with dir.
+    """
     dir = dir.lower()
     dir_idx = 'abc'.find(dir)
     ref_vec = [0,0,0]
     ref_vec[dir_idx] = 1
     return v@ref_vec/np.linalg.norm(v) > thres
 
-def tilt_angle(atoms, proj):
+def tilt_angle(atoms, proj, thres=0.9):
     '''
+    Parameters
+    ----------
+    atoms: ASE Atoms 
+        monochalcogenide atoms
+    proj: String 
+        Direction to check if v is on, either 'a', 'b', or 'c'
+    thres: float (optional)
+        Threshold for vector alignment along direction specified. 
+        This is implemented as the dot product of v and unit vector 
+        corresponding to dir.
+
     proj is the plane to project v,w and the string 
     has the following order: opposite, adjacent
     '''
@@ -36,7 +72,7 @@ def tilt_angle(atoms, proj):
     tilt_angle = {}
     for idx in Ge_idx:
         for D in dis_vec[src==idx]:
-            if vec_dir_check(D, dir =proj[1], thres = 0.9):
+            if vec_dir_check(D, dir =proj[1], thres = thres):
                 try: 
                     tilt_angle[idx]
                     print(f'Duplicate found at idx = {idx}.')
