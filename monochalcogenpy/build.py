@@ -6,6 +6,33 @@ from monochalcogenpy.utils import fill_abc, sort_axis_indices
 from monochalcogenpy.spacegroup import Spacegroup_MX
 
 def unit_cell(a, b, c, orientation ='ac', use_symm=False):
+    """
+    Parameters
+    ----------
+    a: Float
+        vector length along a
+    b: Float
+        vector length along b
+    c: Float
+        vector length along c 
+    orientation: Str
+        orientation of the armchair direction followed by 
+        the direction normal to the layer. For example 
+        orientation ='ac' means armchair is along a and vdw along c. 
+        orientation ='bc' means armchair is along b and vdw along c.
+    use_symm: Bool
+        whether to use symmetry-based 2-atom basis definition or to 
+        explicitly define 4-atom scaled position. Either gives the same
+        answer but one retains spacegroup symmetry.
+
+    Scaled atomic positions are used to create a unit cell of monolayer monochalcogen.
+    The implementaiton assumes all spacegroup 31 symmetry operations. Relative positions
+    are obtained from rigid polyhedral approximation. Two implementations are coded and 
+    they give the same answer but use_symm returns Atoms with spacegroup symmetry. 
+    
+    Currently ref_orientation is written to be a1= armchair direction and a2=zigzag but 
+    output atomic positions are rotated to specified orientation.
+    """
     ref_orientation = 'ac'
     #currently only ac orientation is supported
     cell = np.diag([a,b,c])
@@ -48,6 +75,36 @@ def unit_cell(a, b, c, orientation ='ac', use_symm=False):
 
 
 def unit_cell_bulk(a, b, c, registry=[0., 0.], orientation ='ac', use_symm=True):
+    """
+    Parameters
+    ----------
+    a: Float
+        vector length along a
+    b: Float
+        vector length along b
+    c: Float
+        vector length along c 
+    registry: List
+        Scaled position shifts (interlayer registry) along the armchair 
+        and zigzag direction respectively.
+    orientation: Str
+        orientation of the armchair direction followed by 
+        the direction normal to the layer. For example 
+        orientation ='ac' means armchair is along a and vdw along c. 
+        orientation ='bc' means armchair is along b and vdw along c.
+    use_symm: Bool
+        whether to use symmetry-based 2-atom basis definition or to 
+        explicitly define 8-atom scaled position. Either gives the same
+        answer but one retains spacegroup symmetry.
+
+    Scaled atomic positions are used to create a unit cell of bulk monochalcogen.
+    The implementaiton assumes all spacegroup 62 symmetry operations. Relative positions
+    are obtained from rigid polyhedral approximation. Interlayer registry are implemented as half the shift. 
+    Two implementations are coded and they give the same answer but use_symm returns Atoms with spacegroup symmetry. 
+    
+    Currently ref_orientation is written to be a1= armchair direction and a2=zigzag but 
+    output atomic positions are rotated to specified orientation.
+    """
     ref_orientation = 'ac'
     #currently only ac orientation is supported
     cell = np.diag([a,b,c])
@@ -95,5 +152,9 @@ def unit_cell_bulk(a, b, c, registry=[0., 0.], orientation ='ac', use_symm=True)
     return atoms
 
 def pos_by_orientation(pos, orientation, ref_orientation):
+    """
+    Rotate positions currently specified in assumed ref_orientation 
+    to specified (desired) orientation.
+    """
     sort_idx = sort_axis_indices(fill_abc(orientation), fill_abc(ref_orientation))
     return pos[:,sort_idx]
