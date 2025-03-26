@@ -34,7 +34,6 @@ def unit_cell(a, b, c, orientation ='ac', use_symm=False):
     output atomic positions are rotated to specified orientation.
     """
     ref_orientation = 'ac'
-    #currently only ac orientation is supported
     cell = np.diag([a,b,c])
     #define a1 > a2
     [a2, a1] = np.sort([a,b])
@@ -64,7 +63,7 @@ def unit_cell(a, b, c, orientation ='ac', use_symm=False):
             [0 + x_Ge, 0, 0.5 - h / 2+z_Ge], #Ge
             [0,        0, 0.5 - h / 2]       #Se
         ])
-        basis = pos = pos_by_orientation(basis, orientation, ref_orientation)
+        basis = pos_by_orientation(basis, orientation, ref_orientation)
         sg = Spacegroup_MX(sg_no=31, orientation=orientation)
         atoms = crystal(
         ('Ge', 'Se'), 
@@ -106,7 +105,6 @@ def unit_cell_bulk(a, b, c, registry=[0., 0.], orientation ='ac', use_symm=True)
     output atomic positions are rotated to specified orientation.
     """
     ref_orientation = 'ac'
-    #currently only ac orientation is supported
     cell = np.diag([a,b,c])
     #define a1 > a2
     [a2, a1] = np.sort([a,b])
