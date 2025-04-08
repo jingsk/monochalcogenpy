@@ -43,7 +43,7 @@ def _projected_vector_angle(v, proj ='ab'):
     opp_idx, adj_idx, flatted_idx = ['abc'.find(i) for i in ordered_idx]
     v[flatted_idx] = 0
     #cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
-    angle = np.abs(np.arctan(v[opp_idx]/v[adj_idx]))
+    angle = np.arctan(v[opp_idx]/v[adj_idx])
     return np.degrees(angle)
 
 def vec_along_dir(v, dir ='c', thres = 0.9):
@@ -116,11 +116,11 @@ def tilt_angle(atoms, proj, thres=0.9, absolute=True):
     for idx in Se_idx:
         for D in dis_vec[src==idx]:
             along_dir = vec_along_dir(D, dir =proj[1], thres = thres)
-            align_dir = vec_align_dir(D, dir =proj[1]) #align or anti align?
-            proj_angle = _projected_vector_angle(D, proj)
-            proj_angle = -proj_angle if not align_dir else proj_angle
-            proj_angle = np.absolute(proj_angle) if absolute else proj_angle
             if along_dir:
+                align_dir = vec_align_dir(D, dir =proj[1]) #align or anti align?
+                proj_angle = _projected_vector_angle(D, proj)
+                proj_angle = -proj_angle if not align_dir else proj_angle
+                proj_angle = np.absolute(proj_angle) if absolute else proj_angle
                 try: 
                     tilt_angle[idx]
                     print(f'Duplicate found at idx = {idx}.')
