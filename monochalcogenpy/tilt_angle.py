@@ -4,6 +4,29 @@ from matscipy.neighbours import neighbour_list
 
 supported_projection = [v+w for v,w in permutations('abc', 2)]
 
+def projection_magnitude(v, dir ='c'):
+    """
+    Parameters
+    ----------
+    v: Numpy Array 
+        Cartesian vector
+    dir: String 
+        Direction to check if v is on, either 'a', 'b', or 'c'
+    thres: float (optional)
+        Threshold for vector alignment along direction specified. 
+        This is implemented as the dot product of v and unit vector 
+        corresponding to dir.
+
+    Given cartesian vector v and direction either a, b, or c, dir, calculate projected 
+    vector magnitude on a plane.
+    """
+    dir = dir.lower()
+    dir_idx = 'abc'.find(dir)
+    ref_vec = [0,0,0]
+    ref_vec[dir_idx] = 1
+    proj_magnitude = v@ref_vec/np.linalg.norm(v)
+    return proj_magnitude
+
 def _projected_vector_angle(v, proj ='ab'):
     """
     Parameters
