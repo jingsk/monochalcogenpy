@@ -46,7 +46,7 @@ def _projected_vector_angle(v, proj ='ab'):
     angle = np.abs(np.arctan(v[opp_idx]/v[adj_idx]))
     return np.degrees(angle)
 
-def vec_dir_check(v, dir ='c', thres = 0.9):
+def vec_along_dir(v, dir ='c', thres = 0.9):
     """
     Parameters
     ----------
@@ -60,13 +60,29 @@ def vec_dir_check(v, dir ='c', thres = 0.9):
         corresponding to dir.
 
     Given cartesian vector v and direction either a, b, or c, dir, check if 
-    v is aligned with dir.
+    v is aligned with dir through specified tolerance.
     """
-    dir = dir.lower()
-    dir_idx = 'abc'.find(dir)
-    ref_vec = [0,0,0]
-    ref_vec[dir_idx] = 1
-    return v@ref_vec/np.linalg.norm(v) > thres
+    proj_magnitude = projection_magnitude(v, dir)
+    return np.abs(proj_magnitude) > thres #, proj_magnitude >0
+
+def vec_align_dir(v, dir ='c'):
+    """
+    Parameters
+    ----------
+    v: Numpy Array 
+        Cartesian vector
+    dir: String 
+        Direction to check if v is on, either 'a', 'b', or 'c'
+    thres: float (optional)
+        Threshold for vector alignment along direction specified. 
+        This is implemented as the dot product of v and unit vector 
+        corresponding to dir.
+
+    Given cartesian vector v and direction either a, b, or c, dir, check if 
+    v is align or anti-aligned to direction.
+    """
+    proj_magnitude = projection_magnitude(v, dir)
+    return proj_magnitude >0
 
 def tilt_angle(atoms, proj, thres=0.9):
     '''
