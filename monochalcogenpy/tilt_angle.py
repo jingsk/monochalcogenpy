@@ -109,7 +109,7 @@ def tilt_angle(atoms, proj, thres=0.9, absolute=True):
     src, dst, dis_vec = neighbour_list(
         'ijD',
         atoms=atoms,
-        cutoff={('Ge', 'Se'): 3.5}
+        cutoff={('Ge', 'Se'): 3.0}
     )
     Se_idx = [atom.index for atom in atoms if atom.symbol=='Se']
     tilt_angle = {}

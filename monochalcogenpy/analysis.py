@@ -22,7 +22,7 @@ def dashboard(traj, time_step, image_name = './dashboard.png'):
     plot_EV(time, E_atom, V, axs[0])
     projections = ['bc', 'ac']
     for p,c in zip(projections, ['tab:orange','tab:green']):
-        theta = [np.concatenate(list(tilt_angle(atoms, p, absolute=False).values())) for atoms in traj]
+        theta = [np.concatenate(list(tilt_angle(atoms, p, thres=0.95, absolute=False).values())) for atoms in traj]
         plot_theta(time,theta,c,p[0],axs[1])
     axs[1].legend(loc='upper right', fontsize=8)
     fig.supxlabel('time (ps)', y=0.025, fontsize=10)
