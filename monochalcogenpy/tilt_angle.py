@@ -84,7 +84,7 @@ def vec_align_dir(v, dir ='c'):
     proj_magnitude = projection_magnitude(v, dir)
     return proj_magnitude >0
 
-def tilt_angle(atoms, proj, thres=0.9):
+def tilt_angle(atoms, proj, thres=0.9, absolute=True):
     '''
     Parameters
     ----------
@@ -96,28 +96,37 @@ def tilt_angle(atoms, proj, thres=0.9):
         Threshold for vector alignment along direction specified. 
         This is implemented as the dot product of v and unit vector 
         corresponding to dir.
+    absolute: bool (optional)
+        Whether to return positive-definite angles or not. 
 
-    proj is the plane to project v,w and the string 
-    has the following order: opposite, adjacent
+    proj is the plane to project v. The proj string 
+    has the following order: opposite, adjacent. If not absolute, 
+    angle is positive when Se->Ge vector is aligned with the positive
+    direction of the adjacent direction and negative when it's anti-aligned. 
     '''
     if proj not in supported_projection:
         raise ValueError(f"Projection {proj} not supported.")
     src, dst, dis_vec = neighbour_list(
         'ijD',
         atoms=atoms,
-        cutoff={('Ge', 'Se'): 3}
+        cutoff={('Ge', 'Se'): 3.5}
     )
-    Ge_idx = [atom.index for atom in atoms if atom.symbol=='Ge']
+    Se_idx = [atom.index for atom in atoms if atom.symbol=='Se']
     tilt_angle = {}
-    for idx in Ge_idx:
+    for idx in Se_idx:
         for D in dis_vec[src==idx]:
-            if vec_dir_check(D, dir =proj[1], thres = thres):
+            along_dir = vec_along_dir(D, dir =proj[1], thres = thres)
+            align_dir = vec_align_dir(D, dir =proj[1]) #align or anti align?
+            proj_angle = _projected_vector_angle(D, proj)
+            proj_angle = -proj_angle if not align_dir else proj_angle
+            proj_angle = np.absolute(proj_angle) if absolute else proj_angle
+            if along_dir:
                 try: 
                     tilt_angle[idx]
                     print(f'Duplicate found at idx = {idx}.')
                     print(f'dis_vec = {dis_vec[src == idx]}.')
-                    tilt_angle[idx] = tilt_angle[idx]+[_projected_vector_angle(D, proj)]
+                    tilt_angle[idx] = tilt_angle[idx]+[proj_angle]
                 except KeyError:
-                    tilt_angle[idx] = [_projected_vector_angle(D, proj)]
+                    tilt_angle[idx] = [proj_angle]
     return tilt_angle
                 
