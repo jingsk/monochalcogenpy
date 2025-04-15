@@ -99,6 +99,8 @@ def tilt_angle(atoms, proj, thres=0.9, absolute=True):
     absolute: bool (optional)
         Whether to return positive-definite angles or not. 
 
+    Returns a dict with key = Se atomic indices and values lists of 
+    projected tilt angles measured within the cutoff, thres specified.
     proj is the plane to project v. The proj string 
     has the following order: opposite, adjacent. If not absolute, 
     angle is positive when Se->Ge vector is aligned with the positive
